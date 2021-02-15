@@ -22,13 +22,21 @@ public class Window extends JFrame implements KeyListener{
 	//This 2D array will contain the bots responses
 	String[][] Responses= {
 			//greeting
-			{"Hello there, my name is chef, What would you like to ask me today"},
+			{"Hello there, my name is Elon, What would you like to ask me today"},
 			//answer
 			{},
 			//Default
 			{"Sorry I did not understand that. I may not have enough updates to understand what you were asking"},
 			//Goodbye
-			{"It was a pleasure to talk to you","Have a great day","See you later","Goodbye"}
+			{"It was a pleasure to talk to you","Have a great day","See you later","Goodbye"},
+			
+			{"Thank you for asking. I'm 49 now and will be 50 this year."},
+			
+			{"I'm a big fan of dogecoin!", "Spaceships are cool.", "I love cars!"},
+			
+			{"Parasite.", "Black Mirror."},
+			
+			{"I was born in Pretoria, South Africa, June 28 1971."}
 	};
 	//Constructor to creat the window
 	public Window() {
@@ -119,11 +127,41 @@ public class Window extends JFrame implements KeyListener{
 		List<String> sent= Arrays.asList(s.split(" "));
 		addText("\n-->Bot:\t");
 		//if it is hello print a greeting
-		if(sent.contains("hello")) {
+		if(sent.contains("hello")||sent.contains("hi")||sent.contains("hey")) {
 			r=0;
 			c=0;
 			
 		}
+		// Asking how elon's age 
+		else if(sent.contains("old")||sent.contains("age")&&(sent.contains("you")&&sent.contains("your"))) {
+			r = 4;
+			c = 0;
+			
+		}
+		// Asking about elon's favourite things or hobbies. Two favorites to account for diff spelling
+		else if((sent.contains("favorite")||(sent.contains("favourite"))&&sent.contains("things"))||sent.contains("hobbies")||sent.contains("thing")) {
+			r = 5;
+			c=(int)Math.round(Math.random()*2);
+		
+		}
+	
+		//Asking about specific favourite thing. Nested if's might not be the best, consider revision?
+		else if(sent.contains("favourite")||sent.contains("favorite")){
+			r = 6;
+			if(sent.contains("movie"))
+				c = 0;
+			 else if (sent.contains("series")||sent.contains("show"))
+				c = 1;
+			 else {
+				r = 2;
+				c = 0;
+			}
+		    }
+			// Asking elon where or when he was born 
+		else if((sent.contains("when")||sent.contains("where"))&&sent.contains("born")) {
+			r = 7;
+			c = 0;
+			}
 		//if its q end the chat and disable the input field
 		else if(sent.contains("q")) {
 			r=3;
