@@ -141,6 +141,9 @@ public class Window extends JFrame implements KeyListener{
 		if(sent.contains("q"))
 			addText("-------------------------------------------------------------------------------------Chat Has Ended------------------------------------------------------------------------------------");
 	}	
+	
+	
+	//This is a test
 
 	
 }
