@@ -28,20 +28,33 @@ public class Window extends JFrame implements KeyListener{
 	String[][] Responses= {
 			//greeting
 			{"Hello there, my name is Elon, What would you like to ask me today?"},
-			//answer
-			{},
+			//Thank you
+			{"You're welcome"},
 			//Default
 			{"Sorry I did not understand that. I may not have enough updates to understand what you were asking"},
 			//Goodbye
 			{"It was a pleasure to talk to you","Have a great day","See you later","Goodbye"},
-			//Elon's age
-			{"Thank you for asking. I'm 49 now and will be 50 this year."},
-			//Elon's general interests
+			//Career Facts
+			{"My first company was Zip2,which eventually sold to Compaq for $307 million.",
+				"I am the founder of Sace Exploration technologies, better known as SpaceX",
+				"In 2008 I took over as CEO of Tesla.",
+				"I was the cofounder of X.com, which later merged with confinity to form paypal and was then sold to ebay for $1.5 Billion!",
+				"In 2015 I co-founded OpenAI, a non profit reasearch company.",
+				"In 2016 I founded Nueralink, a company that focuses on bran-computer interactions.",
+				"In 2006 I helped create SolarCity.",
+				"The main companies I have been involved in are: Zip2,SpaceX,Tesla,OpenAI,Nueralink and SolarCity"},
+			//general random interests
 			{"I'm a big fan of dogecoin!", "Spaceships are cool.", "I love cars!"},
-			//Elon's favourite specific favourite things
+			//Interests facts
 			{"Parasite.", "Black Mirror."},
-			//Birth place
-			{"I was born in Pretoria, South Africa, June 28 1971."}
+			//Life Facts
+			{"I was born in Pretoria, South Africa.", "June 28 1971.","Thank you for asking. I'm 49 now and will be 50 this year.", 
+				"My parents were Maye who was my mother and Errol who was my father. I am not very fond of my father."," I have two siblings. Tosca who is my sister and Kimbal who is my brother",
+				"I started university in Pretoria, which I later moved to Canada and went to Queens university. \n\tThen after two years I transferred to the University of Pennsylvania. \n\tAfter That I started my phd at stanford where I dropped out after two days.",
+				"I have had two wives but those ended in divorce. I am currently am dating the musician grimes",
+				"My first wife's name was Justine Wilson and we were married from 2000-2008. We had 5 children. \n\tOne of our kids Nevada unfortunately passed away due to sudden infant death syndrome",
+				"My second wife's name was Talula Riley and we were married from 2010-2016",
+				"I am currently dating the musician Grimes. We have one child together named X AE A-XII. We had a fun time naming this one"}
 	};
 	
 	//Constructor to create the window
@@ -149,36 +162,113 @@ public class Window extends JFrame implements KeyListener{
 			c=0;
 			
 		}
-		// Asking how elon's age 
-		else if(sent.contains("old")||sent.contains("age")&&(sent.contains("you")&&sent.contains("your"))) {
-			r = 4;
-			c = 0;
-			
-		}
-		// Asking about elon's favourite things or hobbies. Two favorites to account for diff spelling
-		else if((sent.contains("favorite")||(sent.contains("favourite"))&&sent.contains("things"))||sent.contains("hobbies")||sent.contains("thing")) {
-			r = 5;
-			c=(int)Math.round(Math.random()*2);
-		
-		}
-	
-		//Asking about specific favourite thing. Nested if's might not be the best, consider revision?
-		else if(sent.contains("favourite")||sent.contains("favorite")){
-			    r = 6;
-			if(sent.contains("movie"))
-				c = 0;
-			 else if (sent.contains("series")||sent.contains("show"))
-				c = 1;
-			 else {
-				r = 2;
-				c = 0;
-			}
-		    }
-			// Asking elon where or when he was born 
-		else if((sent.contains("when")||sent.contains("where"))&&sent.contains("born")) {
+//--------------------------------------------------Life Facts---------------------------------------------------------//	
+			// Asking where born
+		else if(sent.contains("where")&&sent.contains("born")) {
 			r = 7;
 			c = 0;
+			}//Asking when born
+		else if(sent.contains("when")&&sent.contains("born")) {
+			r = 7;
+			c = 1;
+		}//Asking age
+		else if((sent.contains("old")||sent.contains("age"))&&(sent.contains("you")&&sent.contains("your"))) {
+			r = 7;
+			c = 2;
+		}
+		else if(sent.contains("who")&&sent.contains("parents")) {
+			r = 7;
+			c = 3;
+		}
+		else if(sent.contains("siblings")||sent.contains("brother")||sent.contains("sister")) {
+			r = 7;
+			c = 4;
+		}
+		else if(sent.contains("education")) {
+			r = 7;
+			c = 5;
+		}
+		else if(sent.contains("first")&&sent.contains("wife")) {
+			r = 7;
+			c = 6;
+		}
+		else if(sent.contains("second")&&sent.contains("wife")) {
+			r = 7;
+			c = 6;
+		}
+		else if(sent.contains("wife")||sent.contains("married")) {
+			r = 7;
+			c = 5;
+		}
+		else if(sent.contains("currently")||sent.contains("dating")||sent.contains("grimes")) {
+			r = 7;
+			c = 6;
+		}
+//--------------------------------------------------Interests---------------------------------------------------------//		
+		//Asking about specific favorite things
+		else if((sent.contains("favourite")||sent.contains("favorite"))&&sent.contains("movie")) {
+			r = 6;
+			c = 0;
 			}
+		else if((sent.contains("favourite")||sent.contains("favorite"))&&(sent.contains("series")||sent.contains("show"))) {
+			r = 6;	
+			c = 1;
+		    }
+		// Random favorite thing
+		else if((sent.contains("favorite")||sent.contains("favourite"))&&(sent.contains("things")||sent.contains("hobbies")||sent.contains("thing"))) {
+			r = 5;
+			c=(int)Math.round(Math.random()*2);
+		}
+		
+//----------------------------------------------------Career----------------------------------------------------------//
+		
+		else if((sent.contains("zip2")||sent.contains("first"))&&(sent.contains("company")||sent.contains("business"))) {
+			r = 4;
+			c = 0;
+		}
+		//SpaceX
+		else if(sent.contains("spacex")) {
+			r = 4;
+			c = 1;
+		}
+		//tesla
+		else if(sent.contains("tesla")) {
+			r = 4;
+			c = 2;
+		}
+		//paypal
+		else if(sent.contains("x.com")||sent.contains("confinity")||sent.contains("ebay")||sent.contains("paypal")) {
+			r = 4;
+			c = 3;
+		}
+		//OpenAI
+		else if(sent.contains("openai")) {
+			r = 4;
+			c = 4;
+		}
+		//Nueralink
+		else if(sent.contains("nueralink")) {
+			r = 4;
+			c = 5;
+		}
+		//solar city
+		else if(sent.contains("solarcity")) {
+			r = 4;
+			c = 6;
+		}
+		//if its q end the chat and disable the input field
+
+		// list of all major companies
+		else if((sent.contains("companies")||sent.contains("businesses"))&&sent.contains("what")) {
+			r = 4;
+			c = 7;
+		}
+		
+//------------------------------------------------------Random-----------------------------------------------//
+		else if(sent.contains("thanks")||(sent.contains("thank")&&sent.contains("you"))) {
+			r = 1;
+			c = 0;
+		}	
 		//if its q end the chat and disable the input field
 		else if(sent.contains("q")) {
 			r=3;
