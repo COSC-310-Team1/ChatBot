@@ -1,9 +1,13 @@
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -15,19 +19,18 @@ import javax.swing.JTextArea;
 public class Window extends JFrame implements KeyListener{
 	//Here we make a window that will contain our text area box and the input box at the bottom as well as a scroll bar the shows up when needed
 	JPanel pane= new JPanel();
-	JTextArea talkArea= new JTextArea(27, 69);
-	JTextArea input= new JTextArea(2,69);
+	JTextArea talkArea= new JTextArea(25, 73);
+	JTextArea input= new JTextArea(2,65);
 	JScrollPane sideBar= new JScrollPane(talkArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	//This is to load the image of the bot into an icon form
 	ImageIcon icon = new ImageIcon("img/bot.png");
-	//Object for the elonPicture I created. Needed more variables and didn't want to clutter. --Ben
-	ChatIcon elonPic;
+
 
 	
 	//This 2D array will contain the bots responses
 	String[][] Responses= {
 			//greeting
-			{"Hello there, my name is Elon, What would you like to ask me today?"},
+			{"Hello there, my name is Elon, What would you like to ask me today?", "I'm very good, thank you."},
 			//Thank you
 			{"You're welcome"},
 			//Default
@@ -44,9 +47,9 @@ public class Window extends JFrame implements KeyListener{
 				"In 2006 I helped create SolarCity.",
 				"The main companies I have been involved in are: Zip2,SpaceX,Tesla,OpenAI,Nueralink and SolarCity"},
 			//general random interests
-			{"I'm a big fan of dogecoin!", "Spaceships are cool.", "I love cars!"},
+			{"I'm a big fan of dogecoin, and all forms of cryptocurrency!", "Spaceships are cool I guess.", "I love cars! I remember when I bought my first McLaren F1.", "I love anime!"},
 			//Interests facts
-			{"Parasite.", "Black Mirror."},
+			{"Probably Parasite, it was definitely the best movie of 2019.", "Black Mirror, I really like the concepts it explores.", "I really enjoyed Your Name, but i'm also a fan of Studio Ghibli. Princess Mononoke is one of my favourite\n\tfilms by them."},
 			//Life Facts
 			{"I was born in Pretoria, South Africa.", "June 28 1971.","Thank you for asking. I'm 49 now and will be 50 this year.", 
 				"My parents were Maye who was my mother and Errol who was my father. I am not very fond of my father."," I have two siblings. Tosca who is my sister and Kimbal who is my brother",
@@ -54,7 +57,12 @@ public class Window extends JFrame implements KeyListener{
 				"I have had two wives but those ended in divorce. I am currently am dating the musician grimes",
 				"My first wife's name was Justine Wilson and we were married from 2000-2008. We had 5 children. \n\tOne of our kids Nevada unfortunately passed away due to sudden infant death syndrome",
 				"My second wife's name was Talula Riley and we were married from 2010-2016",
-				"I am currently dating the musician Grimes. We have one child together named X AE A-XII. We had a fun time naming this one"}
+				"I am currently dating the musician Grimes. We have one child together named X AE A-XII.\n\tWe had a fun time naming this one."
+				},
+			//Appearances/Interviews
+			{"I had a cameo in The Simpsons, The Big Bang theory, South Park, and Rick and Morty. Maybe you've seen\n\tone of my episodes?", 
+			"Yes, I was on Joe Rogan's podcast. In 2018 I think. We talked about all sorts of things, but I got\n\tin trouble for that one thing I did..."}
+			
 	};
 	
 	//Constructor to create the window
@@ -71,9 +79,17 @@ public class Window extends JFrame implements KeyListener{
 		//For our window we need to add our scrollbar and our input text box
 		pane.add(sideBar);
 		pane.add(input);
-		//Jlabel adds robot below chat window. Image can be changed for aesthetics.
-		JLabel pic = new JLabel(new ImageIcon(icon.getImage()));
-		pane.add(pic);
+		
+		//Add a GIF as a jLabel based on URL.
+		try {
+		URL url = new URL("https://opengameart.org/sites/default/files/robot-idle.gif");
+		JLabel gif = new JLabel(new ImageIcon(new ImageIcon(url).getImage().getScaledInstance(78, 78, Image.SCALE_DEFAULT)));
+		pane.add(gif);
+		}
+		catch(MalformedURLException e) {
+			System.out.println(e);
+		}
+		
 		//set the background image of the window
 		pane.setBackground(new Color(0,150,200));
 		//add the pane
@@ -82,13 +98,18 @@ public class Window extends JFrame implements KeyListener{
 		talkArea.setEditable(false);
 		//adding a keylistener that can listen for events
 		input.addKeyListener(this);
+		//Set the font
+		input.setFont(new javax.swing.plaf.FontUIResource("Comic Sans MS",Font.BOLD,12));
+		talkArea.setFont(new javax.swing.plaf.FontUIResource("Comic Sans MS",Font.BOLD,12));
 		//set the window to become visible
 		setVisible(true);
 		//Calling the addText method to add text to the text ares
 		addText("\t\t\tPlease type Q to end the conversation\n" );
 		
-		//Choose initial coordinates.
-		elonPic = new ChatIcon(36,87,40, "img/musk.png");
+		
+
+		
+	
 		
 	}
 
@@ -110,10 +131,19 @@ public class Window extends JFrame implements KeyListener{
 			//set the input field to empty
 			input.setText("");
 			//Call the method that adds the text to the text are
-			addText("\n-->You:\t "+msg+"\n");
+			addText("\n-->You:\t"+msg+"\n");
 			
+			//Check to see if the input is a question.
+			Boolean question;
+			if(msg.indexOf('?') != -1) 
+				question = true;
+			else
+				question = false;
+			
+			// Replace all punctuation so it doesn't interfere with responses
 			msg = msg.replace('?', (char)32);
 			msg = msg.replace('.', (char)32);
+			msg = msg.replace(',', (char)32);
 			
 			//trim the end of whitespaces
 			msg=msg.trim();
@@ -121,7 +151,7 @@ public class Window extends JFrame implements KeyListener{
 			msg=msg.toLowerCase();
 			
 			//call the response method sending the msg String 
-			response(msg);
+			response(msg, question);
 			
 			
 		}
@@ -151,7 +181,7 @@ public class Window extends JFrame implements KeyListener{
 	}
 	
 	//The method that will get the bots response
-	public void response(String s) {
+	public void response(String s, Boolean question) {
 		int r,c;
 		//make a list of every work in the message
 		List<String> sent= Arrays.asList(s.split(" "));
@@ -160,6 +190,12 @@ public class Window extends JFrame implements KeyListener{
 		if(sent.contains("hello")||sent.contains("hi")||sent.contains("hey")) {
 			r=0;
 			c=0;
+			
+		}
+		//response to how are you?
+		else if(sent.contains("how")&&sent.contains("are")&&sent.contains("you")) {
+			r=0;
+			c=1;
 			
 		}
 //--------------------------------------------------Life Facts---------------------------------------------------------//	
@@ -190,19 +226,31 @@ public class Window extends JFrame implements KeyListener{
 		}
 		else if(sent.contains("first")&&sent.contains("wife")) {
 			r = 7;
-			c = 6;
+			c = 7;
 		}
 		else if(sent.contains("second")&&sent.contains("wife")) {
 			r = 7;
-			c = 6;
+			c = 8;
 		}
 		else if(sent.contains("wife")||sent.contains("married")) {
 			r = 7;
-			c = 5;
+			c = 6;
 		}
 		else if(sent.contains("currently")||sent.contains("dating")||sent.contains("grimes")) {
 			r = 7;
-			c = 6;
+			c = 9;
+		}
+//--------------------------------------------------Appearances/interviews---------------------------------------------------------//	
+		//Shows he has appeared in.
+		else if(sent.contains("what")&&(sent.contains("shows")||sent.contains("show"))&&sent.contains("appeared")) {
+			r = 8;
+			c = 0;
+		}
+		//Joe rogan podcast
+		else if(sent.contains("joe")&&sent.contains("rogan")) {
+		   r= 8;
+		   c= 1;
+		   
 		}
 //--------------------------------------------------Interests---------------------------------------------------------//		
 		//Asking about specific favorite things
@@ -210,14 +258,19 @@ public class Window extends JFrame implements KeyListener{
 			r = 6;
 			c = 0;
 			}
+		//Favorite show
 		else if((sent.contains("favourite")||sent.contains("favorite"))&&(sent.contains("series")||sent.contains("show"))) {
 			r = 6;	
 			c = 1;
 		    }
+		else if((sent.contains("favourite")||sent.contains("favorite"))&&(sent.contains("anime"))) {
+			r = 6;	
+			c = 2;
+		    }
 		// Random favorite thing
 		else if((sent.contains("favorite")||sent.contains("favourite"))&&(sent.contains("things")||sent.contains("hobbies")||sent.contains("thing"))) {
 			r = 5;
-			c=(int)Math.round(Math.random()*2);
+			c=(int)Math.round(Math.random()*3);
 		}
 		
 //----------------------------------------------------Career----------------------------------------------------------//
@@ -268,7 +321,7 @@ public class Window extends JFrame implements KeyListener{
 		else if(sent.contains("thanks")||(sent.contains("thank")&&sent.contains("you"))) {
 			r = 1;
 			c = 0;
-		}	
+		}
 		//if its q end the chat and disable the input field
 		else if(sent.contains("q")) {
 			r=3;
@@ -281,34 +334,24 @@ public class Window extends JFrame implements KeyListener{
 			c=0;
 		}
 		
+	    // If the msg received was a question and the response is not default. There is a 1/5 chance bot responds this.
+		if(question&&r!=2&&((int)Math.round(Math.random()*4))==4) {
+			addText("That's a great question!\n");
+			addText("\n-->Elon:\t");
+		}
+		
 		//add the response to the text Area
 		addText(Responses[r][c]+"\n");	
 		
-	    //Moves the elon chat pic and paints it each time we chat with him
-		elonPic.move(65,412);
-		repaint();
-		
 		//again checking if it was q and making a visible message saying the chat has ended across window
 		if(sent.contains("q"))
-			addText("-------------------------------------------------------------------------------------Chat Has Ended------------------------------------------------------------------------------------");
+			addText("--------------------------------------------Chat Has Ended--------------------------------------------");
+		
+		
+		//Changed length from the og below. Fixed bug where the window moves out of frame on the x axis when q is pressed. 
+		//addText("-------------------------------------------------------------------------------------Chat Has Ended------------------------------------------------------------------------------------");
 	}	 
 	
-
-	 public void paint (Graphics g)
-	    {  
-		   
-	       super.paint (g);
-	       
-	       //Draw based on coordinates when elon is moving, otherwise paint him in the corner.
-	       if(elonPic.isMoving())
-	       g.drawImage(elonPic.getImage(), elonPic.getX(), elonPic.getY(), elonPic.getSize(), elonPic.getSize(),this);
-	       else
-	       g.drawImage(elonPic.getImage(), 670, 379, 90, 90, this);
-	       
-	        
-	    }
-
-         
 
 	
 }
