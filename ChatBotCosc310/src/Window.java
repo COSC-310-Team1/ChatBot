@@ -36,7 +36,7 @@ public class Window extends JFrame implements KeyListener{
 			//Default
 			{"Sorry I did not understand that. I may not have enough updates to understand what you were asking"},
 			//Goodbye
-			{"It was a pleasure to talk to you","Have a great day","See you later","Goodbye"},
+			{"It was a pleasure to talk to you","Have a great day","See you later","Goodbye", "We must colonize Mars!"},
 			//Career Facts
 			{"My first company was Zip2,which eventually sold to Compaq for $307 million.",
 				"I am the founder of Sace Exploration technologies, better known as SpaceX",
@@ -47,9 +47,13 @@ public class Window extends JFrame implements KeyListener{
 				"In 2006 I helped create SolarCity.",
 				"The main companies I have been involved in are: Zip2,SpaceX,Tesla,OpenAI,Nueralink and SolarCity"},
 			//general random interests
-			{"I'm a big fan of dogecoin, and all forms of cryptocurrency!", "Spaceships are cool I guess.", "I love cars! I remember when I bought my first McLaren F1.", "I love anime!"},
-			//Interests facts
-			{"Probably Parasite, it was definitely the best movie of 2019.", "Black Mirror, I really like the concepts it explores.", "I really enjoyed Your Name, but i'm also a fan of Studio Ghibli. Princess Mononoke is one of my favourite\n\tfilms by them."},
+			{ "I'm a big fan of dogecoin, and all forms of cryptocurrency!", "Spaceships are cool I guess.",
+					"I love cars! I remember when I bought my first McLaren F1.", "I love anime!" },
+			// Interests facts
+			{ "Probably Parasite, it was definitely the best movie of 2019.",
+					"Black Mirror, I really like the concepts it explores.",
+					"I really enjoyed Your Name, but i'm also a fan of Studio Ghibli. Princess Mononoke is one of my favourite\n\tfilms by them.",
+					"My favourite airplane is the SR-71 Blackbird. The A-XII in X AE A-XII is the predecessor to this plane." },
 			//Life Facts
 			{"I was born in Pretoria, South Africa.", "June 28 1971.","Thank you for asking. I'm 49 now and will be 50 this year.", 
 				"My parents were Maye who was my mother and Errol who was my father. I am not very fond of my father."," I have two siblings. Tosca who is my sister and Kimbal who is my brother",
@@ -57,12 +61,16 @@ public class Window extends JFrame implements KeyListener{
 				"I have had two wives but those ended in divorce. I am currently am dating the musician grimes",
 				"My first wife's name was Justine Wilson and we were married from 2000-2008. We had 5 children. \n\tOne of our kids Nevada unfortunately passed away due to sudden infant death syndrome",
 				"My second wife's name was Talula Riley and we were married from 2010-2016",
-				"I am currently dating the musician Grimes. We have one child together named X AE A-XII.\n\tWe had a fun time naming this one."
+				"I am currently dating the musician Grimes. We have one child together named X AE A-XII.\n\tWe had a fun time naming this one.",
+				"When I was 12 I sold my first game Blastar for $500.",
+				"I taught myself to code when I was around 10 years old",
+				"I mainly spend my time between SpaceX and Tesla, and i'm heavily involved with the engineering decisions\n\tat those companies. Though I also spend a lot of my time at OpenAI too.",
+				"I own a lot of cars, but mainly drive my Model S. Though I only drive Teslas now, i've owned a \n\t1978 BMW 320i and a 1967 Jaguar (E-type)."
 				},
 			//Appearances/Interviews
-			{"I had a cameo in The Simpsons, The Big Bang theory, South Park, and Rick and Morty. Maybe you've seen\n\tone of my episodes?", 
-			"Yes, I was on Joe Rogan's podcast. In 2018 I think. We talked about all sorts of things, but I got\n\tin trouble for that one thing I did..."}
-			
+			{ "I had a cameo in The Simpsons, The Big Bang theory, South Park, and Rick and Morty. Maybe you've seen\n\tone of my episodes?",
+			  "Yes, I was on Joe Rogan's podcast. In 2018 I think. We talked about all sorts of things, but I got\n\tin trouble for that one thing I did..." }
+
 	};
 	
 	//Constructor to create the window
@@ -82,6 +90,7 @@ public class Window extends JFrame implements KeyListener{
 		
 		//Add a GIF as a jLabel based on URL.
 		try {
+		//GIF: Harrington, D. (2020). Pixel-Robot[GIF]. Retrieved from https://opengameart.org/content/pixel-robot.
 		URL url = new URL("https://opengameart.org/sites/default/files/robot-idle.gif");
 		JLabel gif = new JLabel(new ImageIcon(new ImageIcon(url).getImage().getScaledInstance(78, 78, Image.SCALE_DEFAULT)));
 		pane.add(gif);
@@ -240,6 +249,24 @@ public class Window extends JFrame implements KeyListener{
 			r = 7;
 			c = 9;
 		}
+		else if(sent.contains("first")&&(sent.contains("software")||sent.contains("game"))) {
+			r =7;
+			c = 10;
+		}
+		else if(sent.contains("how")&&sent.contains("learn")&&(sent.contains("code")||sent.contains("program"))) {
+			r = 7;
+			c = 11;
+		}
+		else if (sent.contains("spend")&&(sent.contains("time")||sent.contains("freetime"))){
+			r = 7;
+			c = 12;
+			
+		}
+		else if(sent.contains("car")&&(sent.contains("drive")||sent.contains("own"))) {
+			r = 7;
+			c = 13;
+			
+		}
 //--------------------------------------------------Appearances/interviews---------------------------------------------------------//	
 		//Shows he has appeared in.
 		else if(sent.contains("what")&&(sent.contains("shows")||sent.contains("show"))&&sent.contains("appeared")) {
@@ -267,6 +294,10 @@ public class Window extends JFrame implements KeyListener{
 			r = 6;	
 			c = 2;
 		    }
+		else if((sent.contains("favourite")||sent.contains("favorite"))&&(sent.contains("aircraft")||sent.contains("airplane"))) {
+			r = 6;
+			c = 3;
+		}
 		// Random favorite thing
 		else if((sent.contains("favorite")||sent.contains("favourite"))&&(sent.contains("things")||sent.contains("hobbies")||sent.contains("thing"))) {
 			r = 5;
@@ -325,7 +356,7 @@ public class Window extends JFrame implements KeyListener{
 		//if its q end the chat and disable the input field
 		else if(sent.contains("q")) {
 			r=3;
-			c=(int)Math.round(Math.random()*3);
+			c=(int)Math.round(Math.random()*4);
 			input.disable();
 		}
 		//default case
