@@ -269,7 +269,8 @@ public class Window extends JFrame implements KeyListener{
 			c = 12;
 			
 		}
-		else if(sent.contains("car")&&(sent.contains("drive")||sent.contains("own"))) {
+		// intended input: what cars do you own? or what car do you drive?
+		else if((sent.contains("cars")||sent.contains("car"))&&(sent.contains("drive")||sent.contains("own"))) {
 			r = 7;
 			c = 13;
 			
