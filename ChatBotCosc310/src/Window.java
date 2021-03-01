@@ -206,6 +206,8 @@ public class Window extends JFrame implements KeyListener{
 		else if(sent.contains("how")&&sent.contains("are")&&sent.contains("you")&&!sent.contains("old")) {
 			r=0;
 			c=1;
+			//Thats a great question doesn't really make sense.
+			question = false;
 			
 		}
 //--------------------------------------------------Life Facts---------------------------------------------------------//	
@@ -217,10 +219,12 @@ public class Window extends JFrame implements KeyListener{
 		else if(sent.contains("when")&&sent.contains("born")) {
 			r = 7;
 			c = 1;
-		}//Asking age. Fix #3 Need to change && between you and your to || 
+		}//Asking age. Fix #3 Need to change && between you and your to || implemented 
 		else if((sent.contains("old")||sent.contains("age"))&&(sent.contains("you")||sent.contains("your"))) {
 			r = 7;
 			c = 2;
+			//Thats a great question doesn't really make sense with response.
+			question = false;
 		}
 		else if(sent.contains("who")&&sent.contains("parents")) {
 			r = 7;
@@ -250,19 +254,14 @@ public class Window extends JFrame implements KeyListener{
 			r = 7;
 			c = 9;
 		}
+		//Elon's first software he made or game he created.
 		else if(sent.contains("first")&&(sent.contains("software")||sent.contains("game"))) {
 			r =7;
 			c = 10;
-		}
-		else if(sent.contains("how")&&sent.contains("learn")&&(sent.contains("code")||sent.contains("program"))) {
+		}//issue #7 can now ask when did you learn programming and when did you learn to program
+		else if((sent.contains("when")||sent.contains("how"))&&sent.contains("learn")&&(sent.contains("code")||sent.contains("program")||sent.contains("programming"))) {
 			r = 7;
 			c = 11;
-		}
-		//issue #7 can now ask when did you learn programming and when did you learn to program.
-		else if (sent.contains("when")&&sent.contains("learn")&&(sent.contains("code")||sent.contains("program")||sent.contains("programming"))) {
-		   r = 7;
-		   c = 11;
-			
 		}
 		else if (sent.contains("spend")&&(sent.contains("time")||sent.contains("freetime"))){
 			r = 7;
@@ -277,7 +276,7 @@ public class Window extends JFrame implements KeyListener{
 		}
 //--------------------------------------------------Appearances/interviews---------------------------------------------------------//	
 		//Shows he has appeared in.
-		else if(sent.contains("what")&&(sent.contains("shows")||sent.contains("show"))&&sent.contains("appeared")) {
+		else if((sent.contains("shows")||sent.contains("show"))&&sent.contains("appeared")) {
 			r = 8;
 			c = 0;
 		}
