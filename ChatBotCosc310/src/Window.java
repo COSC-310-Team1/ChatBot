@@ -39,7 +39,7 @@ public class Window extends JFrame implements KeyListener{
 			{"It was a pleasure to talk to you","Have a great day","See you later","Goodbye", "We must colonize Mars!"},
 			//Career Facts
 			{"My first company was Zip2,which eventually sold to Compaq for $307 million.",
-				"I am the founder of Sace Exploration technologies, better known as SpaceX",
+				"I am the founder of Space Exploration technologies, better known as SpaceX",
 				"In 2008 I took over as CEO of Tesla.",
 				"I was the cofounder of X.com, which later merged with confinity to form paypal and was then sold to ebay for $1.5 Billion!",
 				"In 2015 I co-founded OpenAI, a non profit reasearch company.",
@@ -63,7 +63,7 @@ public class Window extends JFrame implements KeyListener{
 				"My second wife's name was Talula Riley and we were married from 2010-2016",
 				"I am currently dating the musician Grimes. We have one child together named X AE A-XII.\n\tWe had a fun time naming this one.",
 				"When I was 12 I sold my first game Blastar for $500.",
-				"I taught myself to code when I was around 10 years old",
+				"I taught myself to code when I was around 10 years old.",
 				"I mainly spend my time between SpaceX and Tesla, and i'm heavily involved with the engineering decisions\n\tat those companies. Though I also spend a lot of my time at OpenAI too.",
 				"I own a lot of cars, but mainly drive my Model S. Though I only drive Teslas now, i've owned a \n\t1978 BMW 320i and a 1967 Jaguar (E-type)."
 				},
@@ -202,7 +202,8 @@ public class Window extends JFrame implements KeyListener{
 			
 		}
 		//response to how are you?
-		else if(sent.contains("how")&&sent.contains("are")&&sent.contains("you")) {
+		// #2 response bug one -> added sent.contains !old so how old are you does not trigger. 
+		else if(sent.contains("how")&&sent.contains("are")&&sent.contains("you")&&!sent.contains("old")) {
 			r=0;
 			c=1;
 			
@@ -216,8 +217,8 @@ public class Window extends JFrame implements KeyListener{
 		else if(sent.contains("when")&&sent.contains("born")) {
 			r = 7;
 			c = 1;
-		}//Asking age
-		else if((sent.contains("old")||sent.contains("age"))&&(sent.contains("you")&&sent.contains("your"))) {
+		}//Asking age. Fix #3 Need to change && between you and your to || 
+		else if((sent.contains("old")||sent.contains("age"))&&(sent.contains("you")||sent.contains("your"))) {
 			r = 7;
 			c = 2;
 		}
@@ -256,6 +257,12 @@ public class Window extends JFrame implements KeyListener{
 		else if(sent.contains("how")&&sent.contains("learn")&&(sent.contains("code")||sent.contains("program"))) {
 			r = 7;
 			c = 11;
+		}
+		//issue #7 can now ask when did you learn programming and when did you learn to program.
+		else if (sent.contains("when")&&sent.contains("learn")&&(sent.contains("code")||sent.contains("program")||sent.contains("programming"))) {
+		   r = 7;
+		   c = 11;
+			
 		}
 		else if (sent.contains("spend")&&(sent.contains("time")||sent.contains("freetime"))){
 			r = 7;
