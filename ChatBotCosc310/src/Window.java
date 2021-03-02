@@ -34,7 +34,7 @@ public class Window extends JFrame implements KeyListener{
 			//Thank you
 			{"You're welcome"},
 			//Default
-			{"Sorry I did not understand that. I may not have enough updates to understand what you were asking"},
+			{"Sorry I did not understand that. I may not have enough updates to understand what you \n\twere asking"},
 			//Goodbye
 			{"It was a pleasure to talk to you","Have a great day","See you later","Goodbye", "We must colonize Mars!"},
 			//Career Facts
@@ -59,8 +59,8 @@ public class Window extends JFrame implements KeyListener{
 				"My parents were Maye who was my mother and Errol who was my father. I am not very fond\n\tof my father."," I have two siblings. Tosca who is my sister and Kimbal who is my brother",
 				"I started university in Pretoria, which I later moved to Canada and went to Queens university. \n\tThen after two years I transferred to the University of Pennsylvania. \n\tAfter That I started my phd at stanford where I dropped out after two days.",
 				"I have had two wives but those ended in divorce. I am currently am dating the musician Grimes",
-				"My first wife's name was Justine Wilson and we were married from 2000-2008. We had 5 children. \n\tOne of our kids Nevada unfortunately passed away due to sudden infant death syndrome",
-				"My second wife's name was Talula Riley and we were married from 2010-2016",
+				"My first wife's name was Justine Wilson and we were married from 2000-2008. We had 5 \n\tchildren. One of our kids Nevada unfortunately passed away due to sudden infant death syndrome.",
+				"My second wife's name was Talula Riley and we were married from 2010-2016.",
 				"I am currently dating the musician Grimes. We have one child together named X AE A-XII.\n\tWe had a fun time naming this one.",
 				"When I was 12 I sold my first game Blastar for $500.",
 				"I taught myself to code when I was around 10 years old.",
@@ -238,11 +238,11 @@ public class Window extends JFrame implements KeyListener{
 			r = 7;
 			c = 5;
 		}
-		else if(sent.contains("first")&&sent.contains("wife")) {
+		else if((sent.contains("first")||sent.contains("1st"))&&sent.contains("wife")) {
 			r = 7;
 			c = 7;
 		}
-		else if(sent.contains("second")&&sent.contains("wife")) {
+		else if((sent.contains("second")||sent.contains("2nd"))&&sent.contains("wife")) {
 			r = 7;
 			c = 8;
 		}
@@ -328,7 +328,7 @@ public class Window extends JFrame implements KeyListener{
 			c = 2;
 		}
 		//paypal
-		else if(sent.contains("x.com")||sent.contains("confinity")||sent.contains("ebay")||sent.contains("paypal")) {
+		else if((sent.contains("x")&&sent.contains("com"))||sent.contains("confinity")||sent.contains("ebay")||sent.contains("paypal")) {
 			r = 4;
 			c = 3;
 		}
