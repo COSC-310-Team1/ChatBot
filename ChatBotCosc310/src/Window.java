@@ -41,34 +41,34 @@ public class Window extends JFrame implements KeyListener{
 			{"My first company was Zip2,which eventually sold to Compaq for $307 million.",
 				"I am the founder of Space Exploration technologies, better known as SpaceX",
 				"In 2008 I took over as CEO of Tesla.",
-				"I was the cofounder of X.com, which later merged with confinity to form paypal and was then sold to ebay for $1.5 Billion!",
+				"I was the cofounder of X.com, which later merged with confinity to form paypal and was then \n\tsold to ebay for $1.5 Billion!",
 				"In 2015 I co-founded OpenAI, a non profit reasearch company.",
-				"In 2016 I founded Nueralink, a company that focuses on bran-computer interactions.",
+				"In 2016 I founded Neuralink, a company that focuses on bran-computer interactions.",
 				"In 2006 I helped create SolarCity.",
-				"The main companies I have been involved in are: Zip2,SpaceX,Tesla,OpenAI,Nueralink and SolarCity"},
+				"The main companies I have been involved in are: Zip2,SpaceX,Tesla,OpenAI,Neuralink and SolarCity"},
 			//general random interests
 			{ "I'm a big fan of dogecoin, and all forms of cryptocurrency!", "Spaceships are cool I guess.",
 					"I love cars! I remember when I bought my first McLaren F1.", "I love anime!" },
 			// Interests facts
 			{ "Probably Parasite, it was definitely the best movie of 2019.",
 					"Black Mirror, I really like the concepts it explores.",
-					"I really enjoyed Your Name, but i'm also a fan of Studio Ghibli. Princess Mononoke is one of my favourite\n\tfilms by them.",
-					"My favourite airplane is the SR-71 Blackbird. The A-XII in X AE A-XII is the predecessor to this plane." },
+					"I really enjoyed Your Name, but I'm also a fan of Studio Ghibli. Princess Mononoke is one of my\n\tfavourite films by them.",
+					"My favourite airplane is the SR-71 Blackbird. The A-XII in X AE A-XII is the predecessor to\n\tthis plane." },
 			//Life Facts
 			{"I was born in Pretoria, South Africa.", "June 28 1971.","Thank you for asking. I'm 49 now and will be 50 this year.", 
-				"My parents were Maye who was my mother and Errol who was my father. I am not very fond of my father."," I have two siblings. Tosca who is my sister and Kimbal who is my brother",
+				"My parents were Maye who was my mother and Errol who was my father. I am not very fond\n\tof my father."," I have two siblings. Tosca who is my sister and Kimbal who is my brother",
 				"I started university in Pretoria, which I later moved to Canada and went to Queens university. \n\tThen after two years I transferred to the University of Pennsylvania. \n\tAfter That I started my phd at stanford where I dropped out after two days.",
-				"I have had two wives but those ended in divorce. I am currently am dating the musician grimes",
+				"I have had two wives but those ended in divorce. I am currently am dating the musician Grimes",
 				"My first wife's name was Justine Wilson and we were married from 2000-2008. We had 5 children. \n\tOne of our kids Nevada unfortunately passed away due to sudden infant death syndrome",
 				"My second wife's name was Talula Riley and we were married from 2010-2016",
 				"I am currently dating the musician Grimes. We have one child together named X AE A-XII.\n\tWe had a fun time naming this one.",
 				"When I was 12 I sold my first game Blastar for $500.",
 				"I taught myself to code when I was around 10 years old.",
-				"I mainly spend my time between SpaceX and Tesla, and i'm heavily involved with the engineering decisions\n\tat those companies. Though I also spend a lot of my time at OpenAI too.",
-				"I own a lot of cars, but mainly drive my Model S. Though I only drive Teslas now, i've owned a \n\t1978 BMW 320i and a 1967 Jaguar (E-type)."
+				"I mainly spend my time between SpaceX and Tesla, and I'm heavily involved with the engineering decisions\n\tat those companies. I also spend a lot of my time at OpenAI too.",
+				"I own a lot of cars, but mainly drive my Model S. Though I only drive Teslas now, I've owned a \n\t1978 BMW 320i and a 1967 Jaguar (E-type)."
 				},
 			//Appearances/Interviews
-			{ "I had a cameo in The Simpsons, The Big Bang theory, South Park, and Rick and Morty. Maybe you've seen\n\tone of my episodes?",
+			{ "I had a cameo in The Simpsons, The Big Bang theory, South Park, and Rick and Morty. Maybe\n\tyou've seen one of my episodes?",
 			  "Yes, I was on Joe Rogan's podcast. In 2018 I think. We talked about all sorts of things, but I got\n\tin trouble for that one thing I did..." }
 
 	};
@@ -159,7 +159,7 @@ public class Window extends JFrame implements KeyListener{
 			//convert the msg to lower case so case doesn't matter
 			msg=msg.toLowerCase();
 			
-			//call the response method sending the msg String 
+			//call the response method sending the msg String and boolean question which is true if a question was asked
 			response(msg, question);
 			
 			
@@ -234,7 +234,7 @@ public class Window extends JFrame implements KeyListener{
 			r = 7;
 			c = 4;
 		}
-		else if(sent.contains("education")) {
+		else if(sent.contains("education")||sent.contains("school")) {
 			r = 7;
 			c = 5;
 		}
@@ -337,8 +337,8 @@ public class Window extends JFrame implements KeyListener{
 			r = 4;
 			c = 4;
 		}
-		//Nueralink
-		else if(sent.contains("nueralink")) {
+		//Neuralink
+		else if(sent.contains("neuralink")) {
 			r = 4;
 			c = 5;
 		}
