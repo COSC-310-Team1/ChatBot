@@ -21,7 +21,7 @@
 ---------------------------------------
 ---------------------------------------
 
-![image4](https://user-images.githubusercontent.com/75397522/111018899-b91a0c80-8370-11eb-826b-74e7f7e34070.png)
+![image4](https://user-images.githubusercontent.com/75397522/111018899-b91a0c80-8370-11eb-826b-74e7f7e34070.png) \n
 **Figure 1:** Main class
 The only purpose of the main class is to instantiate a new Window, which is our chatbot and its functionality.
 
