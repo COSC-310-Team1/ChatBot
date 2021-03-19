@@ -3,11 +3,16 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -15,6 +20,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import edu.stanford.nlp.pipeline.CoreEntityMention;
+import edu.stanford.nlp.pipeline.CoreSentence;
+import edu.stanford.nlp.coref.data.CorefChain;
+import edu.stanford.nlp.ling.*;
+import edu.stanford.nlp.ie.util.*;
+import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.semgraph.*;
+import edu.stanford.nlp.trees.*;
+
+
+
+
+
 
 public class Window extends JFrame implements KeyListener{
 	//Here we make a window that will contain our text area box and the input box at the bottom as well as a scroll bar the shows up when needed
@@ -24,6 +43,7 @@ public class Window extends JFrame implements KeyListener{
 	JScrollPane sideBar= new JScrollPane(talkArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	//This is to load the image of the bot into an icon form
 	ImageIcon icon = new ImageIcon("img/bot.png");
+	StanfordCoreNLP pipeline;
 
 
 	
@@ -69,7 +89,9 @@ public class Window extends JFrame implements KeyListener{
 				},
 			//Appearances/Interviews
 			{ "I had a cameo in The Simpsons, The Big Bang theory, South Park, and Rick and Morty. Maybe\n\tyou've seen one of my episodes?",
-			  "Yes, I was on Joe Rogan's podcast. In 2018 I think. We talked about all sorts of things, but I got\n\tin trouble for that one thing I did..." }
+			  "Yes, I was on Joe Rogan's podcast. In 2018 I think. We talked about all sorts of things, but I got\n\tin trouble for that one thing I did..." },
+			{"I love to travel though.", "There's so many places to visit aren't there?", "Going to different places changes a man.", "War... war ar never changes but men do, through the places they've been"}
+				
 
 	};
 	
@@ -88,6 +110,15 @@ public class Window extends JFrame implements KeyListener{
 		pane.add(sideBar);
 		pane.add(input);
 		
+        // set up pipeline properties
+	    Properties props = new Properties();
+	    // set the list of annotators to run
+	    props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner,parse,depparse,coref,kbp,quote");
+	    // set a property for an annotator, in this case the coref annotator is being set to use the neural algorithm
+	    props.setProperty("coref.algorithm", "neural");
+	    // build pipeline
+	    pipeline = new StanfordCoreNLP(props);
+	
 		//Add a GIF as a jLabel based on URL.
 		try {
 		//GIF: Harrington, D. (2020). Pixel-Robot[GIF]. Retrieved from https://opengameart.org/content/pixel-robot.
@@ -114,6 +145,16 @@ public class Window extends JFrame implements KeyListener{
 		setVisible(true);
 		//Calling the addText method to add text to the text ares
 		addText("\t\t\tPlease type Q to end the conversation\n" );
+		
+        // set up pipeline properties
+	    props = new Properties();
+	    // set the list of annotators to run
+	    props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner,parse,depparse,coref,kbp,quote");
+	    // set a property for an annotator, in this case the coref annotator is being set to use the neural algorithm
+	    props.setProperty("coref.algorithm", "neural");
+	    // build pipeline
+	    pipeline = new StanfordCoreNLP(props);
+	    
 		
 		
 
@@ -148,17 +189,6 @@ public class Window extends JFrame implements KeyListener{
 				question = true;
 			else
 				question = false;
-			
-			// Replace all punctuation so it doesn't interfere with responses
-			msg = msg.replace('?', (char)32);
-			msg = msg.replace('.', (char)32);
-			msg = msg.replace(',', (char)32);
-			
-			//trim the end of whitespaces
-			msg=msg.trim();
-			//convert the msg to lower case so case doesn't matter
-			msg=msg.toLowerCase();
-			
 			//call the response method sending the msg String and boolean question which is true if a question was asked
 			response(msg, question);
 			
@@ -192,14 +222,30 @@ public class Window extends JFrame implements KeyListener{
 	//The method that will get the bots response
 	public void response(String s, Boolean question) {
 		int r,c;
-		//make a list of every work in the message
-		List<String> sent= Arrays.asList(s.split(" "));
+		//Make msg lower case so that s is intact and case doesn't matter for sent
+		String msg = s.toLowerCase();
+		// Replace all punctuation so it doesn't interfere with responses
+		msg = msg.replace('?', (char)32);
+		msg = msg.replace(',', (char)32);
+		msg = msg.replace('.', (char)32);
+		//trim the end of whitespaces
+		msg=msg.trim();
+		//make a list of every word in the message
+		List<String> sent = Arrays.asList(msg.split(" "));
+		List<String> namedEntities = getNameEntityList(s);
 		addText("\n-->Elon:\t");
 		//if it is hello print a greeting
 		if(sent.contains("hello")||sent.contains("hi")||sent.contains("hey")) {
 			r=0;
 			c=0;
 			
+			if((sent.contains("i'm")||(sent.contains("i")&&sent.contains("am"))||(sent.contains("my")&&sent.contains("name"))&&!namedEntities.isEmpty())){
+				String name = namedEntities.get(0);
+				name = name.substring(0,1).toUpperCase() + name.substring(1);
+				addText("Nice to meet you " + name + ". You have a nice name.\n");
+				addText("\n-->Elon:\t");
+			}
+
 		}
 		//response to how are you?
 		// #2 response bug one -> added sent.contains !old so how old are you does not trigger. 
@@ -250,7 +296,7 @@ public class Window extends JFrame implements KeyListener{
 			r = 7;
 			c = 6;
 		}
-		else if(sent.contains("currently")||sent.contains("dating")||sent.contains("grimes")) {
+		else if(sent.contains("currently")||sent.contains("dating")||namedEntities.contains("grimes")) {
 			r = 7;
 			c = 9;
 		}
@@ -281,7 +327,7 @@ public class Window extends JFrame implements KeyListener{
 			c = 0;
 		}
 		//Joe rogan podcast
-		else if(sent.contains("joe")&&sent.contains("rogan")) {
+		else if(namedEntities.contains("joe rogan")) {
 		   r= 8;
 		   c= 1;
 		   
@@ -313,7 +359,7 @@ public class Window extends JFrame implements KeyListener{
 		
 //----------------------------------------------------Career----------------------------------------------------------//
 		
-		else if((sent.contains("zip2")||sent.contains("first"))&&(sent.contains("company")||sent.contains("business"))) {
+		else if(sent.contains("zip2")||(sent.contains("first")&&(sent.contains("company")||sent.contains("business")))) {
 			r = 4;
 			c = 0;
 		}
@@ -323,12 +369,12 @@ public class Window extends JFrame implements KeyListener{
 			c = 1;
 		}
 		//tesla
-		else if(sent.contains("tesla")) {
+		else if(namedEntities.contains("tesla")) {
 			r = 4;
 			c = 2;
 		}
 		//paypal
-		else if((sent.contains("x")&&sent.contains("com"))||sent.contains("confinity")||sent.contains("ebay")||sent.contains("paypal")) {
+		else if(namedEntities.contains("x.com")||sent.contains("confinity")||namedEntities.contains("ebay")||namedEntities.contains("paypal")) {
 			r = 4;
 			c = 3;
 		}
@@ -338,7 +384,7 @@ public class Window extends JFrame implements KeyListener{
 			c = 4;
 		}
 		//Neuralink
-		else if(sent.contains("neuralink")) {
+		else if(namedEntities.contains("neuralink")) {
 			r = 4;
 			c = 5;
 		}
@@ -347,12 +393,37 @@ public class Window extends JFrame implements KeyListener{
 			r = 4;
 			c = 6;
 		}
-		//if its q end the chat and disable the input field
-
 		// list of all major companies
 		else if((sent.contains("companies")||sent.contains("businesses"))&&sent.contains("what")) {
 			r = 4;
 			c = 7;
+		}
+		else if(sent.contains("have")&&sent.contains("you")&&sent.contains("been")&&sent.contains("to")) {
+			
+			if(!namedEntities.isEmpty()) {
+				int rnd = (int)Math.round(Math.random()*(namedEntities.size()-1));
+				String place = namedEntities.get(rnd);
+				place = place.substring(0,1).toUpperCase() + place.substring(1);
+				addText("I can't remember when if i've been to " + place + " or the last time I've been, but " + place + " seems like it would be lovely.\n");
+				addText("\n-->Elon:\t");
+			}
+			else {
+				addText("Been to where?\n");
+				addText("\n-->Elon:\t");
+			}
+			
+		    r = 9;
+		    c=(int)Math.round(Math.random()*3);
+			
+			
+		}
+//----------------------------------------Easter Egg--------------------------------------------------------//
+		else if(s.equals("the earth king has invited you to lake laogai")) {
+			addText("I am honored to accept his invitation.\n");
+			addText("\n-->Elon:\t");
+			r = 2;
+			c=  0;
+			
 		}
 		
 //------------------------------------------------------Random-----------------------------------------------//
@@ -389,6 +460,40 @@ public class Window extends JFrame implements KeyListener{
 		//Changed length from the og below. Fixed bug where the window moves out of frame on the x axis when q is pressed. 
 		//addText("-------------------------------------------------------------------------------------Chat Has Ended------------------------------------------------------------------------------------");
 	}	 
+
+	   
+	
+	    public List<String> getNameEntityList(String s){
+	    	
+	    	List<String> list = new ArrayList();
+            //document for corenlp
+		    CoreDocument document = new CoreDocument(s);
+		    // annnotate the document
+		    pipeline.annotate(document);
+			List<CoreEntityMention> entityMentions = document.entityMentions();
+			System.out.println(entityMentions.toString());
+			
+			for(int i = 0; i<entityMentions.size();i++) {
+				list.add(entityMentions.get(i).toString().toLowerCase());
+				
+			}
+	
+	    	
+	    	return list;
+	    	
+	    }
+	    
+	   
+		
+
+
+
+		
+	
+	
+
+	
+	
 	
 
 	
