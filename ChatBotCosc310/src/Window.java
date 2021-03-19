@@ -21,14 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import edu.stanford.nlp.pipeline.CoreEntityMention;
-import edu.stanford.nlp.pipeline.CoreSentence;
-import edu.stanford.nlp.coref.data.CorefChain;
-import edu.stanford.nlp.ling.*;
-import edu.stanford.nlp.ie.util.*;
-import edu.stanford.nlp.pipeline.*;
-import edu.stanford.nlp.semgraph.*;
-import edu.stanford.nlp.trees.*;
+
 
 
 
@@ -43,7 +36,7 @@ public class Window extends JFrame implements KeyListener{
 	JScrollPane sideBar= new JScrollPane(talkArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	//This is to load the image of the bot into an icon form
 	ImageIcon icon = new ImageIcon("img/bot.png");
-	StanfordCoreNLP pipeline;
+
 
 
 	
@@ -117,7 +110,7 @@ public class Window extends JFrame implements KeyListener{
 	    // set a property for an annotator, in this case the coref annotator is being set to use the neural algorithm
 	    props.setProperty("coref.algorithm", "neural");
 	    // build pipeline
-	    pipeline = new StanfordCoreNLP(props);
+	
 	
 		//Add a GIF as a jLabel based on URL.
 		try {
@@ -153,7 +146,7 @@ public class Window extends JFrame implements KeyListener{
 	    // set a property for an annotator, in this case the coref annotator is being set to use the neural algorithm
 	    props.setProperty("coref.algorithm", "neural");
 	    // build pipeline
-	    pipeline = new StanfordCoreNLP(props);
+	  
 	    
 		
 		
@@ -232,20 +225,12 @@ public class Window extends JFrame implements KeyListener{
 		msg=msg.trim();
 		//make a list of every word in the message
 		List<String> sent = Arrays.asList(msg.split(" "));
-		List<String> namedEntities = getNameEntityList(s);
+		
 		addText("\n-->Elon:\t");
 		//if it is hello print a greeting
 		if(sent.contains("hello")||sent.contains("hi")||sent.contains("hey")) {
 			r=0;
 			c=0;
-			
-			if((sent.contains("i'm")||(sent.contains("i")&&sent.contains("am"))||(sent.contains("my")&&sent.contains("name"))&&!namedEntities.isEmpty())){
-				String name = namedEntities.get(0);
-				name = name.substring(0,1).toUpperCase() + name.substring(1);
-				addText("Nice to meet you " + name + ". You have a nice name.\n");
-				addText("\n-->Elon:\t");
-			}
-
 		}
 		//response to how are you?
 		// #2 response bug one -> added sent.contains !old so how old are you does not trigger. 
@@ -296,7 +281,7 @@ public class Window extends JFrame implements KeyListener{
 			r = 7;
 			c = 6;
 		}
-		else if(sent.contains("currently")||sent.contains("dating")||namedEntities.contains("grimes")) {
+		else if(sent.contains("currently")||sent.contains("dating")||sent.contains("grimes")) {
 			r = 7;
 			c = 9;
 		}
@@ -327,7 +312,7 @@ public class Window extends JFrame implements KeyListener{
 			c = 0;
 		}
 		//Joe rogan podcast
-		else if(namedEntities.contains("joe rogan")) {
+		else if(sent.contains("joe rogan")) {
 		   r= 8;
 		   c= 1;
 		   
@@ -369,12 +354,12 @@ public class Window extends JFrame implements KeyListener{
 			c = 1;
 		}
 		//tesla
-		else if(namedEntities.contains("tesla")) {
+		else if(sent.contains("tesla")) {
 			r = 4;
 			c = 2;
 		}
 		//paypal
-		else if(namedEntities.contains("x.com")||sent.contains("confinity")||namedEntities.contains("ebay")||namedEntities.contains("paypal")) {
+		else if(sent.contains("x.com")||sent.contains("confinity")||sent.contains("ebay")||sent.contains("paypal")) {
 			r = 4;
 			c = 3;
 		}
@@ -384,7 +369,7 @@ public class Window extends JFrame implements KeyListener{
 			c = 4;
 		}
 		//Neuralink
-		else if(namedEntities.contains("neuralink")) {
+		else if(sent.contains("neuralink")) {
 			r = 4;
 			c = 5;
 		}
@@ -398,25 +383,7 @@ public class Window extends JFrame implements KeyListener{
 			r = 4;
 			c = 7;
 		}
-		else if(sent.contains("have")&&sent.contains("you")&&sent.contains("been")&&sent.contains("to")) {
-			
-			if(!namedEntities.isEmpty()) {
-				int rnd = (int)Math.round(Math.random()*(namedEntities.size()-1));
-				String place = namedEntities.get(rnd);
-				place = place.substring(0,1).toUpperCase() + place.substring(1);
-				addText("I can't remember when if i've been to " + place + " or the last time I've been, but " + place + " seems like it would be lovely.\n");
-				addText("\n-->Elon:\t");
-			}
-			else {
-				addText("Been to where?\n");
-				addText("\n-->Elon:\t");
-			}
-			
-		    r = 9;
-		    c=(int)Math.round(Math.random()*3);
-			
-			
-		}
+	
 //----------------------------------------Easter Egg--------------------------------------------------------//
 		else if(s.equals("the earth king has invited you to lake laogai")) {
 			addText("I am honored to accept his invitation.\n");
@@ -463,27 +430,7 @@ public class Window extends JFrame implements KeyListener{
 
 	   
 	
-	    public List<String> getNameEntityList(String s){
-	    	
-	    	List<String> list = new ArrayList();
-            //document for corenlp
-		    CoreDocument document = new CoreDocument(s);
-		    // annnotate the document
-		    pipeline.annotate(document);
-			List<CoreEntityMention> entityMentions = document.entityMentions();
-			System.out.println(entityMentions.toString());
-			
-			for(int i = 0; i<entityMentions.size();i++) {
-				list.add(entityMentions.get(i).toString().toLowerCase());
-				
-			}
-	
-	    	
-	    	return list;
-	    	
-	    }
-	    
-	   
+
 		
 
 
