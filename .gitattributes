@@ -1,0 +1,6 @@
+<<<<<<< HEAD
+ChatBotCosc310/stanford-corenlp-4.2.0/** filter=lfs diff=lfs merge=lfs -text
+=======
+stanford-corenlp-4.2.0/** filter=lfs diff=lfs merge=lfs -text
+
+>>>>>>> ff899d1ab048e9336800c624c7d3779d966006a7
